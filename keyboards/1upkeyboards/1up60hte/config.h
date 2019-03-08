@@ -57,6 +57,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define RGB_DI_PIN F0
 #ifdef RGB_DI_PIN
+#define RGBLIGHT_SLEEP /* added since I didn't like the keyboard using power when the pc turns off */
 #define RGBLIGHT_ANIMATIONS
 #define RGBLED_NUM 14
 #define RGBLIGHT_HUE_STEP 8

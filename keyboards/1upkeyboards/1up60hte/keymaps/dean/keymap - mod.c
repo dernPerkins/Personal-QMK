@@ -24,8 +24,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * Custom Macros
 */
 enum custom_keycodes {
-    GG_MACRO
+    GG_MACRO,
+    SPECIAL_MODE
 };
+bool special_enabled = false;
+int special_led = 0;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	/* 0: Default layer
@@ -74,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
 	│     │Toggl│Forwa│Rever│     │     │     │     │     │     │     │     │     │     │█████│
 	├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
-	│     │HUI+ │HUI- │Val+ │     │     │     │     │     │     │     │     │█████│     │█████│
+	│     │HUI+ │HUI- │Val+ │     │SPMDE│     │     │     │     │     │     │█████│     │█████│
 	├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
 	│     │█████│Sat+ │Sat- │Val- │     │     │     │     │     │     │     │█████│     │     │
 	├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
@@ -82,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	└─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┘
 		*/
 	[RGB]= LAYOUT_all(
-		KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS, \
+		SPECIAL_MODE,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS, \
 		KC_TRNS, RGB_TOG, RGB_MOD, RGB_RMOD, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS,  \
 		KC_TRNS, RGB_HUI, RGB_HUD, RGB_VAI, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_LEFT, KC_TRNS,       KC_TRNS,       \
 		KC_TRNS,       RGB_SAI, RGB_SAD, RGB_VAD, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,       KC_TRNS, KC_TRNS, \
@@ -103,8 +106,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	            SEND_STRING(SS_TAP(X_T)"ggwp!"SS_TAP(X_ENTER));
 	        }
 	        break;
+	    case RGB_MOD:
+	    case RGB_RMOD:
+	    	// If rgb is changed to a different mode go ahead and shut off our custom mode
+	    	special_enabled = false;
+	    	break;
+	    case SPECIAL_MODE:
+	    	special_enabled = !special_enabled;
+	    	break;
         default:
         	break;
+    }
+
+    // if we're in this mode we will be using a custom rgb layer
+    // perform the functions of that layer
+    if (special_enabled) {
+    	SEND_STRING("g");
+    	rgblight_setrgb_at(255,0,0,special_led);
+    	if (special_led == RGBLED_NUM) {
+    		special_led = 0;
+    	} else {
+    		special_led++;
+    	}
     }
     return true;
 }
