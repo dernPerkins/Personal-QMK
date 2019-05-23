@@ -18,6 +18,7 @@
 // Custom Definitions
 #define BL 0
 #define FN 1
+#define RGB 2
 
 /*
 * Custom Macros
@@ -57,7 +58,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ├─────├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
   │ F9  │     │     │     │Calc │     │     │NP_+ │NP_- │ End │PgDwn│Down │     │     │█████│█████│
   ├─────├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
-  │ F10 │     │     │     │     │     │█████│█████│█████│█████│█████│█████│█████│█████│█████│█████│
+  │ F10 │     │     │ RGB │     │     │█████│█████│█████│█████│█████│█████│█████│█████│█████│█████│
   └─────└─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┘
     */
   [FN]= LAYOUT(
@@ -65,7 +66,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_F7, KC_CAPS,   KC_TRNS, KC_TRNS, KC_TRNS, RESET,   KC_TRNS, KC_TRNS, KC_TRNS, KC_PSCR, KC_SLCK,KC_PAUS, KC_UP,   KC_TRNS, KC_TRNS, \
     KC_F8, KC_TRNS,   KC_VOLD, KC_VOLU, KC_MUTE, KC_TRNS, GG_MACRO,KC_PAST, KC_PSLS, KC_HOME, KC_PGUP,KC_LEFT, KC_RGHT, KC_PENT, \
     KC_F9, KC_TRNS,   KC_TRNS, KC_TRNS, KC_CALC, KC_TRNS, KC_TRNS, KC_PPLS, KC_PMNS, KC_END,  KC_PGDN,KC_DOWN, KC_TRNS, KC_TRNS, \
-    KC_F10, KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS)
+    KC_F10, KC_TRNS,   KC_TRNS, MO(RGB), KC_TRNS, KC_TRNS),
+
+    /* 2: RGB Layer
+  ┌─────┌─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┐
+  │     │     │     │     │     │     │     │     │     │     │     │     │     │     │     │     |
+  ├─────├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
+  │     │     │Toggl│Forwa│Rever│     │     │     │     │     │     │     │     │     │     │█████│
+  ├─────├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
+  │     │     │HUI+ │HUI- │Val+ │     │     │     │     │     │     │     │     │     │█████│█████│
+  ├─────├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
+  │     │     │Sat+ │Sat- │Val- │     │     │     │     │     │     │     │     │     │█████│█████│
+  ├─────├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
+  │     │     │     │     │     │     │█████│█████│█████│█████│█████│█████│█████│█████│█████│█████│
+  └─────└─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┘
+    */
+  [RGB]= LAYOUT(
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  \
+    KC_TRNS, KC_TRNS, RGB_TOG, RGB_MOD, RGB_RMOD, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, \
+    KC_TRNS, KC_TRNS, RGB_HUI, RGB_HUD, RGB_VAI, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, \
+    KC_TRNS, KC_TRNS, RGB_SAI, RGB_SAD, RGB_VAD, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, \
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS)
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
